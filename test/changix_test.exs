@@ -15,7 +15,10 @@ defmodule ChangixTest do
     assert ChangixStub.changelog_entry(~D[2019-11-10]).date == ~D[2019-11-10]
   end
 
-  # test "changelog_entry with binary dates"
+  test "changelog_entry with binary dates" do
+    assert ChangixStub.changelog_entry("2019-11-12").date == ~D[2019-11-12]
+    assert ChangixStub.changelog_entry("2019-11-10").date == ~D[2019-11-10]
+  end
 
   # test "changelog_entry with kind labels"
 

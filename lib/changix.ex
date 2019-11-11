@@ -25,6 +25,10 @@ defmodule Changix do
     def_changelog_entry =
       for entry <- entries do
         quote do
+          def changelog_entry(date = unquote(to_string(entry.date))) do
+            unquote(Macro.escape(entry))
+          end
+
           def changelog_entry(unquote(Macro.escape(entry.date))) do
             unquote(Macro.escape(entry))
           end
