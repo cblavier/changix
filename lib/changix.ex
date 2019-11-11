@@ -40,31 +40,43 @@ defmodule Changix do
   end
 
   defp entries(path) do
-    with {:ok, raw_entries} <- read_files_content(path),
-         {:ok, entries} <- parse_entries(raw_entries) do
+    with {:ok, file_names_with_raw_entries} <- read_files_content(path),
+         {:ok, entries} <- parse_entries(file_names_with_raw_entries) do
       {:ok, entries}
     else
-      _ -> :error
+      {:error, reason} -> raise reason
+      _ -> raise "Could not parse changelog"
     end
   end
 
   defp read_files_content(path) do
     with {:ok, paths} <- File.ls(path),
          sorted_paths <- Enum.sort(paths, &(&1 >= &2)),
-         raw_entries <- Enum.map(sorted_paths, &File.read!("#{path}/#{&1}")) do
-      {:ok, raw_entries}
+         file_names_with_raw_entries <- Enum.map(sorted_paths, &{&1, File.read!("#{path}/#{&1}")}) do
+      {:ok, file_names_with_raw_entries}
     else
       _ -> :error
     end
   end
 
-  defp parse_entries(raw_entries) do
-    entries = Enum.map(raw_entries, &Parser.parse_entry/1)
+  defp parse_entries(file_names_with_raw_entries) do
+    entries =
+      Enum.reduce_while(file_names_with_raw_entries, [], fn {file_name, raw_entry}, acc ->
+        case Parser.parse_entry(raw_entry) do
+          {:ok, entry} ->
+            {:cont, acc ++ [entry]}
 
-    if Enum.any?(entries, &(&1 == :error)) do
-      :error
-    else
-      {:ok, entries}
+          {:error, reason} when is_binary(reason) ->
+            {:halt, {:error, "#{reason} for file #{file_name}"}}
+
+          _ ->
+            {:halt, {:error, "Unknown reason for file #{file_name}"}}
+        end
+      end)
+
+    case entries do
+      {:error, reason} -> {:error, reason}
+      _ -> {:ok, entries}
     end
   end
 end

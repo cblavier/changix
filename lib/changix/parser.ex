@@ -9,9 +9,10 @@ defmodule Changix.Parser do
     with {:ok, [raw_header | content]} <- split_header_and_content(raw_entry),
          {:ok, header} <- parse_header(raw_header),
          {:ok, entry} <- build_entry(header, content) do
-      entry
+      {:ok, entry}
     else
-      _ -> :error
+      {:error, reason} -> {:error, reason}
+      _ -> {:error, :unknow_reason}
     end
   end
 
@@ -22,9 +23,10 @@ defmodule Changix.Parser do
       |> Enum.map(&String.trim/1)
       |> Enum.reject(&(&1 == ""))
 
-    case splited_entry do
-      [header | content] -> {:ok, [header | content]}
-      _ -> {:error, :invalid_entry_structure}
+    if length(splited_entry) == 2 do
+      {:ok, splited_entry}
+    else
+      {:error, "Invalid entry structure"}
     end
   end
 
@@ -38,7 +40,7 @@ defmodule Changix.Parser do
         ["date", value], acc ->
           case Date.from_iso8601(value) do
             {:ok, date} -> {:cont, Keyword.put(acc, :date, date)}
-            _ -> {:halt, :error}
+            _ -> {:halt, :invalid_date}
           end
 
         [key, value], acc ->
@@ -48,7 +50,11 @@ defmodule Changix.Parser do
           {:halt, :error}
       end)
 
-    {:ok, header}
+    case header do
+      :invalid_date -> {:error, "Invalid date in header"}
+      :error -> {:error, "Unknow error while parsing header"}
+      _ -> {:ok, header}
+    end
   end
 
   defp build_entry(header, content) do
@@ -56,20 +62,30 @@ defmodule Changix.Parser do
       build_and_validate_struct(header, content)
     else
       kind = Keyword.get(header, :kind)
-      header = Keyword.put(header, :title, kind_title(kind))
+      header = Keyword.put(header, :title, humanize(kind))
       build_and_validate_struct(header, content)
     end
   end
 
-  defp kind_title(title), do: title |> to_string |> String.capitalize()
+  def humanize(atom) when is_atom(atom), do: humanize(Atom.to_string(atom))
+
+  def humanize(bin) when is_binary(bin) do
+    bin =
+      if String.ends_with?(bin, "_id") do
+        binary_part(bin, 0, byte_size(bin) - 3)
+      else
+        bin
+      end
+
+    bin |> String.replace("_", " ") |> String.capitalize()
+  end
 
   defp build_and_validate_struct(header, content) do
-    if Keyword.has_key?(header, :date) && Keyword.has_key?(header, :kind) &&
-         Keyword.has_key?(header, :title) do
+    if Entry.required_headers() |> Enum.all?(&Keyword.has_key?(header, &1)) do
       entry = Keyword.put(header, :content, content)
       {:ok, struct(Entry, entry)}
     else
-      {:error, :missing_entry_header_fields}
+      {:error, "Missing required header fields"}
     end
   end
 end

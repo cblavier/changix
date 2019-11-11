@@ -8,4 +8,6 @@ defmodule Changix.Entry do
     :title,
     :content
   ]
+
+  def required_headers, do: ~w(date kind title)a
 end
