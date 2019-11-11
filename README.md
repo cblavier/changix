@@ -1,6 +1,7 @@
 # Changix
 
-**TODO: Add description**
+Very small & simple Elixir library that gives you changelog features based on a bunch of markdown files.
+Since it leverages on Elixir _metaprogramming_ features, everything is done at compile time, none at runtime.
 
 ## Installation
 
@@ -14,6 +15,10 @@ def deps do
   ]
 end
 ```
+
+## Usage
+
+TODO
 
 Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
 and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
