@@ -5,9 +5,10 @@ defmodule Changix.Entry do
   defstruct [
     :date,
     :kind,
+    :kind_label,
     :title,
     :content
   ]
 
-  def required_headers, do: ~w(date kind title)a
+  def required_headers, do: ~w(date kind)a
 end

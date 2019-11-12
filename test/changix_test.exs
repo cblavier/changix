@@ -5,14 +5,24 @@ defmodule ChangixTest do
     use Changix, path: "test/fixtures/changelog"
   end
 
+  defmodule ChangixStubWithKindLabels do
+    use Changix,
+      path: "test/fixtures/changelog",
+      labels: [new_feature: "Nouvelle fonctionnalité", bugfix: "Correction de bug"]
+  end
+
   test "changelog_entry_count" do
     entries = ChangixStub.changelog_entries()
     assert length(entries) == 2
   end
 
   test "changelog_entry" do
-    assert ChangixStub.changelog_entry(~D[2019-11-12]).date == ~D[2019-11-12]
-    assert ChangixStub.changelog_entry(~D[2019-11-10]).date == ~D[2019-11-10]
+    entry = ChangixStub.changelog_entry(~D[2019-11-12])
+
+    refute is_nil(entry.content)
+    assert entry.date == ~D[2019-11-12]
+    assert entry.kind == :bugfix
+    assert entry.kind_label == "Bugfix"
   end
 
   test "changelog_entry with binary dates" do
@@ -20,10 +30,17 @@ defmodule ChangixTest do
     assert ChangixStub.changelog_entry("2019-11-10").date == ~D[2019-11-10]
   end
 
-  # test "changelog_entry with kind labels"
-
   test "changelog_entry with unknown entry" do
     assert is_nil(ChangixStub.changelog_entry(:foo))
+  end
+
+  @tag :skip
+  test "changelog_entry with kind labels" do
+    assert ChangixStubWithKindLabels.changelog_entry(~D[2019-11-12]).kind_label ==
+             "Correction de bug"
+
+    assert ChangixStubWithKindLabels.changelog_entry(~D[2019-11-10]).kind_label ==
+             "Nouvelle fonctionnalité"
   end
 
   test "changelog_entry with bad date cannot compile" do

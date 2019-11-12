@@ -62,7 +62,7 @@ defmodule Changix.Parser do
       build_and_validate_struct(header, content)
     else
       kind = Keyword.get(header, :kind)
-      header = Keyword.put(header, :title, humanize(kind))
+      header = Keyword.put(header, :kind_label, humanize(kind))
       build_and_validate_struct(header, content)
     end
   end
