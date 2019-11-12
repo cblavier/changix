@@ -27,7 +27,7 @@ defmodule ChangixTest do
   end
 
   test "changelog_entry with bad date cannot compile" do
-    assert_raise RuntimeError, "Invalid date in header for file 2.md", fn ->
+    assert_raise RuntimeError, "Invalid date in header for file 02-bad.md", fn ->
       compile_quoted(
         quote do
           defmodule ChangixBadDate do
@@ -39,11 +39,23 @@ defmodule ChangixTest do
   end
 
   test "changelog_entry without header cannot compile" do
-    assert_raise RuntimeError, "Invalid entry structure for file 2.md", fn ->
+    assert_raise RuntimeError, "Invalid entry structure for file 02-bad.md", fn ->
       compile_quoted(
         quote do
           defmodule ChangixMissingHeader do
             use Changix, path: "test/fixtures/changelog_missing_header"
+          end
+        end
+      )
+    end
+  end
+
+  test "changelog_entry with invalid header cannot compile" do
+    assert_raise RuntimeError, "Missing required header fields for file 02-bad.md", fn ->
+      compile_quoted(
+        quote do
+          defmodule ChangixInvalidHeader do
+            use Changix, path: "test/fixtures/changelog_invalid_header"
           end
         end
       )
