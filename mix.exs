@@ -4,12 +4,15 @@ defmodule Changix.MixProject do
   def project do
     [
       app: :changix,
+      name: "Changix",
+      description: "Elixir library that gives you changelog features based on markdown files.",
+      source_url: "https://github.com/cblavier/changix",
+      licenses: ["MIT"],
+      links: %{"GitHub" => "https://github.com/cblavier/changix"},
       version: "0.1.0",
       elixir: "~> 1.8",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
-      name: "Changix",
-      source_url: "https://github.com/cblavier/changix",
       docs: [
         main: "Changix",
         extras: ["README.md"]

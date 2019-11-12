@@ -1,6 +1,6 @@
 # Changix
 
-Very small & simple Elixir library that gives you changelog features based on a bunch of markdown files.
+Very small & simple Elixir library that gives you changelog features based on markdown files.
 It leverages on Elixir _metaprogramming_ features, so that everything is done at compile time.
 
 Changix come with no runtime dependency, and can be used with any _Markdown_ parser. 
