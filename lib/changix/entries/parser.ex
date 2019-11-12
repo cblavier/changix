@@ -1,9 +1,9 @@
-defmodule Changix.Parser do
+defmodule Changix.Entries.Parser do
   @moduledoc """
     Parses a single changelog file to build an `Changix.Entry`.
   """
 
-  alias Changix.Entry
+  alias Changix.Entries.Entry
 
   @doc """
     Parses a markdown entry with YAML front matter header.

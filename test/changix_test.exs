@@ -10,11 +10,18 @@ defmodule ChangixTest do
     assert length(entries) == 2
   end
 
+  test "changelog_entries returns entries in correct order" do
+    entries = ChangixStub.changelog_entries()
+    first = Enum.at(entries, 0)
+    last = Enum.at(entries, 1)
+    assert Date.to_erl(first.date) >= Date.to_erl(last.date)
+  end
+
   test "changelog_entries with bad path cannot compile" do
     assert_raise RuntimeError, "Unknow changelog path test/fixtures/changelog_unknown_path", fn ->
       compile_quoted(
         quote do
-          defmodule ChangixUnknowPath do
+          defmodule ChangixUnknownPath do
             use Changix, path: "test/fixtures/changelog_unknown_path"
           end
         end
@@ -41,39 +48,52 @@ defmodule ChangixTest do
   end
 
   test "changelog_entry with bad date cannot compile" do
-    assert_raise RuntimeError, "Invalid date in header for file 02-bad.md", fn ->
-      compile_quoted(
-        quote do
-          defmodule ChangixBadDate do
-            use Changix, path: "test/fixtures/changelog_bad_date"
+    assert_error(
+      "Invalid date in header for file 20191110181201-feature-bad.md",
+      fn ->
+        compile_quoted(
+          quote do
+            defmodule ChangixBadDate do
+              use Changix, path: "test/fixtures/changelog_bad_date"
+            end
           end
-        end
-      )
-    end
+        )
+      end
+    )
   end
 
   test "changelog_entry without header cannot compile" do
-    assert_raise RuntimeError, "Invalid entry structure for file 02-bad.md", fn ->
-      compile_quoted(
-        quote do
-          defmodule ChangixMissingHeader do
-            use Changix, path: "test/fixtures/changelog_missing_header"
+    assert_error(
+      "Invalid entry structure for file 20191110181201-feature-bad.md",
+      fn ->
+        compile_quoted(
+          quote do
+            defmodule ChangixMissingHeader do
+              use Changix, path: "test/fixtures/changelog_missing_header"
+            end
           end
-        end
-      )
-    end
+        )
+      end
+    )
   end
 
   test "changelog_entry with invalid header cannot compile" do
-    assert_raise RuntimeError, "Missing required header fields for file 02-bad.md", fn ->
-      compile_quoted(
-        quote do
-          defmodule ChangixInvalidHeader do
-            use Changix, path: "test/fixtures/changelog_invalid_header"
+    assert_error(
+      "Missing required header fields for file 20191110181201-feature-bad.md",
+      fn ->
+        compile_quoted(
+          quote do
+            defmodule ChangixInvalidHeader do
+              use Changix, path: "test/fixtures/changelog_invalid_header"
+            end
           end
-        end
-      )
-    end
+        )
+      end
+    )
+  end
+
+  defp assert_error(message, fun) do
+    assert_raise RuntimeError, message, fun
   end
 
   defp compile_quoted(ast) do

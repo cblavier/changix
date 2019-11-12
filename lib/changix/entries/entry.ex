@@ -1,4 +1,4 @@
-defmodule Changix.Entry do
+defmodule Changix.Entries.Entry do
   @moduledoc """
     Struct for a single changelog entry (ie. a single changelog file).
   """
