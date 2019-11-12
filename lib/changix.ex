@@ -59,6 +59,8 @@ defmodule Changix do
          file_names_with_raw_entries <- Enum.map(sorted_paths, &{&1, File.read!("#{path}/#{&1}")}) do
       {:ok, file_names_with_raw_entries}
     else
+      {:error, :enoent} -> {:error, "Unknow changelog path #{path}"}
+      {:error, reason} -> {:error, reason}
       _ -> :error
     end
   end

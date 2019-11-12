@@ -5,15 +5,21 @@ defmodule ChangixTest do
     use Changix, path: "test/fixtures/changelog"
   end
 
-  defmodule ChangixStubWithKindLabels do
-    use Changix,
-      path: "test/fixtures/changelog",
-      labels: [new_feature: "Nouvelle fonctionnalité", bugfix: "Correction de bug"]
-  end
-
-  test "changelog_entry_count" do
+  test "changelog_entries" do
     entries = ChangixStub.changelog_entries()
     assert length(entries) == 2
+  end
+
+  test "changelog_entries with bad path cannot compile" do
+    assert_raise RuntimeError, "Unknow changelog path test/fixtures/changelog_unknown_path", fn ->
+      compile_quoted(
+        quote do
+          defmodule ChangixUnknowPath do
+            use Changix, path: "test/fixtures/changelog_unknown_path"
+          end
+        end
+      )
+    end
   end
 
   test "changelog_entry" do
@@ -32,15 +38,6 @@ defmodule ChangixTest do
 
   test "changelog_entry with unknown entry" do
     assert is_nil(ChangixStub.changelog_entry(:foo))
-  end
-
-  @tag :skip
-  test "changelog_entry with kind labels" do
-    assert ChangixStubWithKindLabels.changelog_entry(~D[2019-11-12]).kind_label ==
-             "Correction de bug"
-
-    assert ChangixStubWithKindLabels.changelog_entry(~D[2019-11-10]).kind_label ==
-             "Nouvelle fonctionnalité"
   end
 
   test "changelog_entry with bad date cannot compile" do
