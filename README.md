@@ -1,7 +1,10 @@
 # Changix
 
 Very small & simple Elixir library that gives you changelog features based on a bunch of markdown files.
-Since it leverages on Elixir _metaprogramming_ features, everything is done at compile time, none at runtime.
+It leverages on Elixir _metaprogramming_ features, so that everything is done at compile time.
+
+Changix come with no runtime dependency, and can be used with any _Markdown_ parser. 
+A default behavior is implemented if earmark(https://github.com/pragdave/earmark) markdown library is present.
 
 ## Installation
 
@@ -18,9 +21,27 @@ end
 
 ## Usage
 
-TODO
+```elixir
+defmodule MyModule do
 
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/changix](https://hexdocs.pm/changix).
+  include Changix, path: "my_changelog_folder"
+  
+  def list_entries do
+    for entry <- MyModule.changelog_entries() do
+      IO.inspect(entry)
+    end
+  end
+
+  def show_entry(entry_date) do
+    date
+    |> MyModule.changelog_entry()
+    |> IO.inspect
+  end
+
+end
+```
+
+## Documentation
+
+Docs can be found at [https://hexdocs.pm/changix](https://hexdocs.pm/changix).
 

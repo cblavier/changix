@@ -5,6 +5,11 @@ defmodule Changix.Parser do
 
   alias Changix.Entry
 
+  @doc """
+    Parses a markdown entry with YAML front matter header.
+
+    Returns `{:ok, %Changix.Entry{}}` or `{:error, reason}`.
+  """
   def parse_entry(raw_entry) do
     with {:ok, [raw_header | content]} <- split_header_and_content(raw_entry),
          {:ok, header} <- parse_header(raw_header),
@@ -67,9 +72,9 @@ defmodule Changix.Parser do
     end
   end
 
-  def humanize(atom) when is_atom(atom), do: humanize(Atom.to_string(atom))
+  defp humanize(atom) when is_atom(atom), do: humanize(Atom.to_string(atom))
 
-  def humanize(bin) when is_binary(bin) do
+  defp humanize(bin) when is_binary(bin) do
     bin =
       if String.ends_with?(bin, "_id") do
         binary_part(bin, 0, byte_size(bin) - 3)

@@ -1,10 +1,10 @@
 defmodule Changix do
   @moduledoc """
     Compile-time changelog features from static changelog files.
-    Provides following functions:
+    Including the module will provide with following functions:
 
-    - changelog_entries/0, which return all changelog entries ordered by desc date
-    - changelog_entry/1, which takes a date and returns a single entry
+    - `changelog_entries/0`, which return all changelog entries ordered by desc date
+    - `changelog_entry/1`, which takes a date and returns a single entry
   """
 
   alias Changix.Parser

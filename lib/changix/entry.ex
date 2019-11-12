@@ -10,5 +10,8 @@ defmodule Changix.Entry do
     :content
   ]
 
+  @doc """
+    Returns a list of required header fields.
+  """
   def required_headers, do: ~w(date kind)a
 end
