@@ -38,14 +38,17 @@ defmodule Changix.Entries.Parser do
   defp parse_header(raw_header) do
     header =
       raw_header
-      |> String.split(["\n", ":"])
-      |> Enum.map(&String.trim/1)
-      |> Enum.chunk_every(2)
+      |> String.split(["\n"])
+      |> Enum.map(fn header ->
+        header
+        |> String.split(":", parts: 2)
+        |> Enum.map(&String.trim/1)
+      end)
       |> Enum.reduce_while([], fn
-        ["date", value], acc ->
-          case Date.from_iso8601(value) do
-            {:ok, date} -> {:cont, Keyword.put(acc, :date, date)}
-            _ -> {:halt, :invalid_date}
+        ["datetime", value], acc ->
+          case NaiveDateTime.from_iso8601(value) do
+            {:ok, datetime} -> {:cont, Keyword.put(acc, :datetime, datetime)}
+            _ -> {:halt, :invalid_datetime}
           end
 
         [key, value], acc ->
@@ -56,7 +59,7 @@ defmodule Changix.Entries.Parser do
       end)
 
     case header do
-      :invalid_date -> {:error, "Invalid date in header"}
+      :invalid_datetime -> {:error, "Invalid datetime in header"}
       :error -> {:error, "Unknow error while parsing header"}
       _ -> {:ok, header}
     end

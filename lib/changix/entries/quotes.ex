@@ -5,7 +5,7 @@ defmodule Changix.Entries.Quotes do
 
   @doc """
     Returns an AST of the `changelog_entries/0` function that will return a list
-    of all changelog entries, sorted by dates descending.
+    of all changelog entries, sorted by datetimes descending.
   """
   def quote_changelog_entries(entries) do
     quote do
@@ -17,16 +17,16 @@ defmodule Changix.Entries.Quotes do
 
   @doc """
     Returns a list of function ASTs.
-    Each changelog entry has its own `changelog_entry/1` finder (taking either a date or binary).
+    Each changelog entry has its own `changelog_entry/1` finder (taking either a datetime or binary).
   """
   def quote_changelog_entry(entries) do
     for entry <- entries do
       quote do
-        def changelog_entry(date = unquote(to_string(entry.date))) do
+        def changelog_entry(datetime = unquote(NaiveDateTime.to_iso8601(entry.datetime))) do
           unquote(Macro.escape(entry))
         end
 
-        def changelog_entry(unquote(Macro.escape(entry.date))) do
+        def changelog_entry(unquote(Macro.escape(entry.datetime))) do
           unquote(Macro.escape(entry))
         end
       end

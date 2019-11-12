@@ -11,7 +11,11 @@ defmodule Changix.Entries do
   def list(path) do
     with {:ok, file_names_with_raw_entries} <- read_files_content(path),
          {:ok, entries} <- parse_entries(file_names_with_raw_entries),
-         sorted_entries <- Enum.sort(entries, &(Date.to_erl(&1.date) >= Date.to_erl(&2.date))) do
+         sorted_entries <-
+           Enum.sort(
+             entries,
+             &(NaiveDateTime.to_erl(&1.datetime) >= NaiveDateTime.to_erl(&2.datetime))
+           ) do
       {:ok, sorted_entries}
     else
       {:error, reason} -> raise reason
