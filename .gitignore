@@ -24,3 +24,4 @@ changix-*.tar
 
 .elixir_ls
 .vscode
+.DS_Store
