@@ -1,6 +1,6 @@
-defmodule Changix.Entries.Quotes do
+defmodule Changix.Quotes do
   @moduledoc """
-    `Changix.Entries.Quotes` generates functions AST related to changelog entries.
+    `Changix.Quotes` generates functions AST related to changelog entries.
   """
 
   @doc """

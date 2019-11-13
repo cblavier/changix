@@ -1,19 +1,19 @@
-defmodule Changix.Entries.Parser do
+defmodule Changix.Parser do
   @moduledoc """
     Parses a single changelog file to build an `Changix.Entry`.
   """
 
-  alias Changix.Entries.Entry
+  alias Changix.Entry
 
   @doc """
     Parses a markdown entry with YAML front matter header.
 
     Returns `{:ok, %Changix.Entry{}}` or `{:error, reason}`.
   """
-  def parse_entry(raw_entry) do
+  def parse_entry(raw_entry, path) do
     with {:ok, [raw_header | content]} <- split_header_and_content(raw_entry),
          {:ok, header} <- parse_header(raw_header),
-         {:ok, entry} <- build_entry(header, content) do
+         {:ok, entry} <- build_entry(header, hd(content), path) do
       {:ok, entry}
     else
       {:error, reason} -> {:error, reason}
@@ -65,13 +65,13 @@ defmodule Changix.Entries.Parser do
     end
   end
 
-  defp build_entry(header, content) do
+  defp build_entry(header, content, path) do
     if Keyword.has_key?(header, :title) do
-      build_and_validate_struct(header, content)
+      build_and_validate_struct(header, content, path)
     else
       kind = Keyword.get(header, :kind)
       header = Keyword.put(header, :kind_label, humanize(kind))
-      build_and_validate_struct(header, content)
+      build_and_validate_struct(header, content, path)
     end
   end
 
@@ -88,9 +88,10 @@ defmodule Changix.Entries.Parser do
     bin |> String.replace("_", " ") |> String.capitalize()
   end
 
-  defp build_and_validate_struct(header, content) do
-    if Entry.required_headers() |> Enum.all?(&Keyword.has_key?(header, &1)) do
-      entry = Keyword.put(header, :content, content)
+  defp build_and_validate_struct(header, content, path) do
+    entry = Keyword.merge(header, content: content, path: path)
+
+    if Entry.required_headers() |> Enum.all?(&Keyword.has_key?(entry, &1)) do
       {:ok, struct(Entry, entry)}
     else
       {:error, "Missing required header fields"}

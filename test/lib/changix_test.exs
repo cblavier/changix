@@ -49,7 +49,7 @@ defmodule ChangixTest do
 
   test "changelog_entry with bad date cannot compile" do
     assert_error(
-      "Invalid datetime in header for file 20191110181201-feature-bad.md",
+      "Invalid datetime in header for file test/fixtures/changelog_bad_date/20191110181201-feature-bad.md",
       fn ->
         compile_quoted(
           quote do
@@ -64,7 +64,7 @@ defmodule ChangixTest do
 
   test "changelog_entry without header cannot compile" do
     assert_error(
-      "Invalid entry structure for file 20191110181201-feature-bad.md",
+      "Invalid entry structure for file test/fixtures/changelog_missing_header/20191110181201-feature-bad.md",
       fn ->
         compile_quoted(
           quote do
@@ -79,7 +79,7 @@ defmodule ChangixTest do
 
   test "changelog_entry with invalid header cannot compile" do
     assert_error(
-      "Missing required header fields for file 20191110181201-feature-bad.md",
+      "Missing required header fields for file test/fixtures/changelog_invalid_header/20191110181201-feature-bad.md",
       fn ->
         compile_quoted(
           quote do

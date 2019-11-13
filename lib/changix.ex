@@ -8,7 +8,7 @@ defmodule Changix do
   """
 
   alias Changix.Entries
-  alias Changix.Entries.{Entry, Quotes}
+  alias Changix.Quotes
 
   @default_path "/changeog"
 
@@ -16,14 +16,12 @@ defmodule Changix do
     path = Keyword.get(opts, :path, @default_path)
     {:ok, entries} = Entries.list(path)
 
-    def_changelog_entries = Quotes.quote_changelog_entries(entries)
-    def_changelog_entry = Quotes.quote_changelog_entry(entries)
-    def_unknown_changelog_entry = Quotes.quote_unknown_changelog_entry()
-
-    flatten_defs([def_changelog_entries, def_changelog_entry, def_unknown_changelog_entry])
-  end
-
-  def render(%Entry{}) do
+    flatten_defs([
+      quote(do: import(Changix.HTML)),
+      Quotes.quote_changelog_entries(entries),
+      Quotes.quote_changelog_entry(entries),
+      Quotes.quote_unknown_changelog_entry()
+    ])
   end
 
   defp flatten_defs(defs) do
