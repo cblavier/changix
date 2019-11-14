@@ -38,6 +38,18 @@ defmodule ChangixTest do
     assert entry.kind_label == "Bugfix"
   end
 
+  test "changelog_entry markdown rendering with summary" do
+    entry = ChangixStub.changelog_entry(~N[2019-11-10T17:10:05])
+    assert String.starts_with?(entry.full_html, "<h1>Bugfix</h1>")
+    assert String.length(entry.full_html) > String.length(entry.summary_html)
+  end
+
+  test "changelog_entry markdown rendering without summary" do
+    entry = ChangixStub.changelog_entry(~N[2019-11-10T18:12:01])
+    assert String.starts_with?(entry.full_html, "<h1>New feature</h1>")
+    assert String.length(entry.full_html) == String.length(entry.summary_html)
+  end
+
   test "changelog_entry with binary dates" do
     assert ChangixStub.changelog_entry("2019-11-10T17:10:05").datetime == ~N[2019-11-10T17:10:05]
     assert ChangixStub.changelog_entry("2019-11-10T18:12:01").datetime == ~N[2019-11-10T18:12:01]
