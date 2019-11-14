@@ -8,10 +8,10 @@ defmodule Changix.Entries do
     Given a changelog folder path, retrieves a list of changelog entries, parses their
     YAML header and returns them as `Changix.Entry`
   """
-  def list(path) do
+  def render_changelogs(path, opts) do
     with {:ok, file_names_with_raw_entries} <- read_files_content(path),
          {:ok, entries} <- parse_entries(file_names_with_raw_entries),
-         {:ok, rendered_entries} <- render_entries_content(entries),
+         {:ok, rendered_entries} <- render_entries_content(entries, opts),
          sorted_entries <-
            Enum.sort(
              rendered_entries,
@@ -61,11 +61,11 @@ defmodule Changix.Entries do
     end
   end
 
-  defp render_entries_content(entries) do
+  defp render_entries_content(entries, opts) do
     rendered_entries =
       Enum.reduce_while(entries, [], fn entry, acc ->
-        with {:ok, full_html} <- HTML.render_content(entry, summary: false),
-             {:ok, summary_html} <- HTML.render_content(entry, summary: true) do
+        with {:ok, full_html} <- HTML.render_content(entry, Keyword.put(opts, :summary, false)),
+             {:ok, summary_html} <- HTML.render_content(entry, Keyword.put(opts, :summary, true)) do
           entry = Map.merge(entry, %{full_html: full_html, summary_html: summary_html})
           {:cont, acc ++ [entry]}
         else

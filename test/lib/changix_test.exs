@@ -50,6 +50,40 @@ defmodule ChangixTest do
     assert String.length(entry.full_html) == String.length(entry.summary_html)
   end
 
+  test "changelog_entry markdown rendering with custom renderer" do
+    [{mod, _}] =
+      Code.compile_quoted(
+        quote do
+          defmodule ChangixCustomRenderer do
+            use Changix,
+              path: "test/fixtures/changelog",
+              renderer: fn markdown, _path -> {:ok, String.length(markdown)} end
+          end
+        end
+      )
+
+    entry = mod.changelog_entry(~N[2019-11-10T17:10:05])
+    assert entry.full_html == 914
+    assert entry.summary_html == 498
+  end
+
+  test "changelog_entry markdown rendering with custom read more attributes" do
+    [{mod, _}] =
+      Code.compile_quoted(
+        quote do
+          defmodule ChangixCustomReadMore do
+            use Changix,
+              path: "test/fixtures/changelog",
+              read_more_class: "foo",
+              read_more_label: "Bar ..."
+          end
+        end
+      )
+
+    entry = mod.changelog_entry(~N[2019-11-10T17:10:05])
+    assert String.contains?(entry.summary_html, "<div class='foo'>Bar ...</div>")
+  end
+
   test "changelog_entry with binary dates" do
     assert ChangixStub.changelog_entry("2019-11-10T17:10:05").datetime == ~N[2019-11-10T17:10:05]
     assert ChangixStub.changelog_entry("2019-11-10T18:12:01").datetime == ~N[2019-11-10T18:12:01]
