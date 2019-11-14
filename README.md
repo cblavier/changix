@@ -1,6 +1,6 @@
 # Changix
 
-![](https://github.com/actions/cblavier/changix/Elixir%20CI/badge.svg)
+![](https://github.com/actions/cblavier/changix/CI/badge.svg)
 
 Small & simple Elixir library that gives you changelog features based on markdown files.
 It leverages on Elixir _metaprogramming_ features, so that everything is done at compile time, with following benefits:
