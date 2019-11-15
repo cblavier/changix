@@ -24,6 +24,8 @@ defmodule Changix do
     quote bind_quoted: [opts: opts, path: path] do
       {:ok, entries} = Entries.render_changelogs(path, opts)
 
+      @external_resource path
+
       def changelog_entries do
         unquote(Macro.escape(entries))
       end
