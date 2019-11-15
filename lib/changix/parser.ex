@@ -48,7 +48,7 @@ defmodule Changix.Parser do
         ["changed_at", value], acc ->
           case NaiveDateTime.from_iso8601(value) do
             {:ok, changed_at} -> {:cont, Keyword.put(acc, :changed_at, changed_at)}
-            _ -> {:halt, :invalid_datetime}
+            _ -> {:halt, :invalid_changed_at}
           end
 
         [key, value], acc ->
@@ -59,7 +59,7 @@ defmodule Changix.Parser do
       end)
 
     case header do
-      :invalid_datetime -> {:error, "Invalid changed_at in header"}
+      :invalid_changed_at -> {:error, "Invalid changed_at in header"}
       :error -> {:error, "Unknow error while parsing header"}
       _ -> {:ok, header}
     end

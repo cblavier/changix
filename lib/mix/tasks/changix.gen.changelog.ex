@@ -12,7 +12,6 @@ defmodule Mix.Tasks.Changix.Gen.Changelog do
 
   ```
     mix changix.gen.changelog My new feature
-    mix changix.gen.changelog "My new feature"
     mix changix.gen.changelog --folder /priv/changelog --kind bugfix Fixed login
     mix changix.gen.changelog -f /priv/changelog -k bugfix Fixed login
   ```

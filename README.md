@@ -20,7 +20,7 @@ Add `changix` to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:changix, "~> 0.2.0"}
+    {:changix, "~> 0.3.0"}
   ]
 end
 ```
