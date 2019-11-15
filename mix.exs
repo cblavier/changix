@@ -7,7 +7,7 @@ defmodule Changix.MixProject do
       name: "Changix",
       description: "Elixir library that gives you changelog features based on markdown files.",
       source_url: "https://github.com/cblavier/changix",
-      version: "0.4.0",
+      version: "0.3.1",
       elixir: "~> 1.8",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
