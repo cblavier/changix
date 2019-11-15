@@ -8,10 +8,16 @@ It leverages on Elixir _metaprogramming_ features, so that everything is done at
 - **fast**: no filesystem access or Markdown parsing at runtime. HTML is directly embedded in your compiled code.
 - **reliable**: any error in your changelog files will be reported at compile time
 
-Changix does not provide any UI widget, but you will be in good direction to write one into your Phoenix app. A demo webapp with source_code will be released very soon!
+Changix does not provide any UI widget, but you will be in good direction to write one into your Phoenix app.
 
 Changix comes with no runtime dependencies, and can be used with any _Markdown_ parser. 
 A default behavior is implemented if [earmark](https://github.com/pragdave/earmark) markdown library is present.
+
+## Demo
+
+![](https://github.com/cblavier/changix-demo/raw/master/assets/static/images/changix-demo.gif)
+
+See the code for the demo app [here](https://github.com/cblavier/changix-demo)
 
 ## Installation
 
