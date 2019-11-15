@@ -45,9 +45,9 @@ defmodule Changix.Parser do
         |> Enum.map(&String.trim/1)
       end)
       |> Enum.reduce_while([], fn
-        ["datetime", value], acc ->
+        ["changed_at", value], acc ->
           case NaiveDateTime.from_iso8601(value) do
-            {:ok, datetime} -> {:cont, Keyword.put(acc, :datetime, datetime)}
+            {:ok, changed_at} -> {:cont, Keyword.put(acc, :changed_at, changed_at)}
             _ -> {:halt, :invalid_datetime}
           end
 
@@ -59,7 +59,7 @@ defmodule Changix.Parser do
       end)
 
     case header do
-      :invalid_datetime -> {:error, "Invalid datetime in header"}
+      :invalid_datetime -> {:error, "Invalid changed_at in header"}
       :error -> {:error, "Unknow error while parsing header"}
       _ -> {:ok, header}
     end

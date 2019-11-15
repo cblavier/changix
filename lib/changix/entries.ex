@@ -15,7 +15,7 @@ defmodule Changix.Entries do
          sorted_entries <-
            Enum.sort(
              rendered_entries,
-             &(NaiveDateTime.to_erl(&1.datetime) >= NaiveDateTime.to_erl(&2.datetime))
+             &(NaiveDateTime.to_erl(&1.changed_at) >= NaiveDateTime.to_erl(&2.changed_at))
            ) do
       {:ok, sorted_entries}
     else

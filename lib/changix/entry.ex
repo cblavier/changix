@@ -3,7 +3,7 @@ defmodule Changix.Entry do
     Struct for a single changelog entry (ie. a single changelog file).
   """
   defstruct [
-    :datetime,
+    :changed_at,
     :path,
     :kind,
     :kind_label,
@@ -16,5 +16,5 @@ defmodule Changix.Entry do
   @doc """
     Returns a list of required header fields.
   """
-  def required_headers, do: ~w(datetime kind path)a
+  def required_headers, do: ~w(changed_at kind path)a
 end

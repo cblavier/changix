@@ -32,31 +32,27 @@ If you don't use any Markdown library, I recommand you also add [earmark](https:
 
 Create a `changelog` folder at the root of your project and write separate changelog files after each of your release.
 
-A changelog file must contain a _YAML Front Matter_ header with `datetime` and `kind` attributes. `title` is optional. 
+A changelog file must contain a _YAML Front Matter_ header with `changed_at` and `kind` attributes. `title` is optional. 
 
-A mix task to generate new changelog entries will be shipped to `changix` very quickly.
+Run `mix changix.gen.changelog Fixed Lorem --kind bugfix` to generate a new changelog entry such as:
 
 ```yaml
-datetime: 2019-11-10T17:10:05
+changed_at: 2019-11-10T17:10:05
 kind: bugfix
 title: Fixed Lorem
 ---
-# Your change summary in whatever Markdown you want
+## Your change summary in whatever Markdown you want
 Lorem _ipsum dolor_ sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
 Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
 <!--more-->
 
-# Further details in the read-more section
-Lorem _ipsum dolor_ sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+## Further details in the read-more section
 Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
 Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 ```
 
-Then simply including `Changix` will give you access to all your changelog entries.
+Then including `Changix` will give you access to all your changelog entries.
 
 ```elixir
 defmodule MyModule do
@@ -69,8 +65,8 @@ defmodule MyModule do
     end
   end
 
-  def show_entry(entry_datetime) do
-    entry_datetime
+  def show_entry(entry_changed_at) do
+    entry_changed_at
     |> changelog_entry()
     |> IO.inspect
   end

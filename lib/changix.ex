@@ -29,11 +29,13 @@ defmodule Changix do
       end
 
       for entry <- entries do
-        def changelog_entry(datetime = unquote(NaiveDateTime.to_iso8601(entry.datetime))) do
+        @external_resource entry.path
+
+        def changelog_entry(unquote(NaiveDateTime.to_iso8601(entry.changed_at))) do
           unquote(Macro.escape(entry))
         end
 
-        def changelog_entry(unquote(Macro.escape(entry.datetime))) do
+        def changelog_entry(unquote(Macro.escape(entry.changed_at))) do
           unquote(Macro.escape(entry))
         end
       end

@@ -1,0 +1,11 @@
+changed_at: <%= @changed_at %>
+kind: <%= @kind %>
+title: <%= @title %>
+---
+## Your change summary
+__write any markdown you want__
+
+<!--more-->
+
+## Further change details
+__write any markdown you want__
