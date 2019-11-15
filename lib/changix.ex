@@ -7,7 +7,7 @@ defmodule Changix do
     - `changelog_entry/1`, which takes a date and returns a single entry
 
   `include Changix` can take following options:
-    - `path`: changelog folder. Defaults to "/changelog"
+    - `path`: changelog folder. Defaults to "changelog"
     - `renderer`: function that takes 2 parameters(markdown, changelog_path) and should
       return `{:ok, html}` or `{:error, reason}`. Defaults to Earmark implementation.
     - `read_more_class`: css class used to render the read more link. Defaults to `read_more`.
@@ -16,7 +16,7 @@ defmodule Changix do
 
   alias Changix.Entries
 
-  @default_path "/changelog"
+  @default_path "changelog"
 
   defmacro __using__(opts \\ []) do
     path = Keyword.get(opts, :path, @default_path)

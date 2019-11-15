@@ -2,7 +2,7 @@
 
 ![](https://github.com/cblavier/changix/workflows/CI/badge.svg)
 
-Small & simple Elixir library that gives you changelog features based on markdown files.
+Elixir library that gives you changelog features based on markdown files.
 It leverages on Elixir _metaprogramming_ features, so that everything is done at compile time, with following benefits:
 
 - **fast**: no filesystem access or Markdown parsing at runtime. HTML is directly embedded in your compiled code.
@@ -10,7 +10,7 @@ It leverages on Elixir _metaprogramming_ features, so that everything is done at
 
 Changix does not provide any UI widget, but you will be in good direction to write one into your Phoenix app. A demo webapp with source_code will be released very soon!
 
-Changix come with no runtime dependency, and can be used with any _Markdown_ parser. 
+Changix comes with no runtime dependencies, and can be used with any _Markdown_ parser. 
 A default behavior is implemented if [earmark](https://github.com/pragdave/earmark) markdown library is present.
 
 ## Installation
