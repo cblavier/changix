@@ -44,7 +44,7 @@ defmodule Mix.Tasks.Changix.Gen.Changelog do
     Generator.create_directory(folder, quiet: quiet)
 
     Generator.copy_template(
-      Path.join(File.cwd!(), @template),
+      Path.join(Application.app_dir(:changix), @template),
       Path.join(folder, file_name(changed_at, title_parts)),
       [
         title: Enum.join(title_parts, " "),
