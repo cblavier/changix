@@ -6,6 +6,7 @@ defmodule Mix.Tasks.Changix.Gen.Changelog do
 
     - `--folder` or `-f`. Optional, defaults to `/changelog`.
     - `--kind` or `-k`. Optional, defaults to nil.
+    - `--quiet` or `-q'. Optional.
     - `title`. Mandatory.
 
   ## Examples:
@@ -27,8 +28,8 @@ defmodule Mix.Tasks.Changix.Gen.Changelog do
   def run(args) do
     {switches, title_parts, _} =
       OptionParser.parse(args,
-        switches: [folder: :string, kind: :string],
-        aliases: [f: :folder, k: :kind]
+        switches: [folder: :string, kind: :string, quiet: :boolean],
+        aliases: [f: :folder, k: :kind, q: :quiet]
       )
 
     if blank?(title_parts) do
@@ -37,9 +38,10 @@ defmodule Mix.Tasks.Changix.Gen.Changelog do
 
     kind = Keyword.get(switches, :kind, "")
     folder = Keyword.get(switches, :folder, @default_folder)
+    quiet = Keyword.get(switches, :quiet, false)
+
     folder = File.cwd!() |> Path.join(folder)
     changed_at = local_now()
-    quiet = Mix.env() == :test
 
     Generator.create_directory(folder, quiet: quiet)
 

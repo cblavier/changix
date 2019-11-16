@@ -22,27 +22,27 @@ defmodule Mix.Tasks.Changix.Gen.ChangelogTest do
   end
 
   test "generate changelog with title", %{folder: folder} do
-    Changelog.run(["foo", "--folder", folder])
+    Changelog.run(["foo", "--folder", folder, "--quiet"])
     assert_file(folder, "*-foo.md", "title: foo")
   end
 
   test "generate changelog with uppercase title", %{folder: folder} do
-    Changelog.run(["Foo", "--folder", folder])
+    Changelog.run(["Foo", "--folder", folder, "--quiet"])
     assert_file(folder, "*-foo.md", "title: Foo")
   end
 
   test "generate changelog with multi part title", %{folder: folder} do
-    Changelog.run(["Foo", "bar", "--folder", folder])
+    Changelog.run(["Foo", "bar", "--folder", folder, "--quiet"])
     assert_file(folder, "*-foo_bar.md", "title: Foo bar")
   end
 
   test "generate changelog with title and kind", %{folder: folder} do
-    Changelog.run(["Foo", "--folder", folder, "--kind", "bugfix"])
+    Changelog.run(["Foo", "--folder", folder, "--kind", "bugfix", "--quiet"])
     assert_file(folder, "*-foo.md", ["title: Foo", "kind: bugfix"])
   end
 
   test "generate changelog with aliases", %{folder: folder} do
-    Changelog.run(["Foo", "-f", folder, "-k", "bugfix"])
+    Changelog.run(["Foo", "-f", folder, "-k", "bugfix", "-q"])
     assert_file(folder, "*-foo.md", ["title: Foo", "kind: bugfix"])
   end
 
