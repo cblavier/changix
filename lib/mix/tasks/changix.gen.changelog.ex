@@ -37,14 +37,14 @@ defmodule Mix.Tasks.Changix.Gen.Changelog do
 
     kind = Keyword.get(switches, :kind, "")
     folder = Keyword.get(switches, :folder, @default_folder)
-    folder = Path.join(File.cwd!(), folder)
+    folder = File.cwd!() |> Path.join(folder)
     changed_at = local_now()
     quiet = Mix.env() == :test
 
     Generator.create_directory(folder, quiet: quiet)
 
     Generator.copy_template(
-      Path.join(Application.app_dir(:changix), @template),
+      :changix |> Application.app_dir() |> Path.join(@template),
       Path.join(folder, file_name(changed_at, title_parts)),
       [
         title: Enum.join(title_parts, " "),
@@ -69,8 +69,5 @@ defmodule Mix.Tasks.Changix.Gen.Changelog do
 
   defp blank?([]), do: true
   defp blank?(title_parts) when length(title_parts) > 1, do: false
-
-  defp blank?([title_part]) do
-    String.trim(title_part) == ""
-  end
+  defp blank?([title_part]), do: String.trim(title_part) == ""
 end
