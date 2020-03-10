@@ -7,7 +7,7 @@ defmodule Changix.MixProject do
       name: "Changix",
       description: "Elixir library that gives you changelog features based on markdown files.",
       source_url: "https://github.com/cblavier/changix",
-      version: "0.3.2",
+      version: "1.0.0",
       elixir: "~> 1.9",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
@@ -29,9 +29,9 @@ defmodule Changix.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:credo, "~> 1.1.0", only: :dev, runtime: false},
+      {:credo, "~> 1.3", only: :dev, runtime: false},
       {:ex_doc, "~> 0.21", only: :dev, runtime: false},
-      {:earmark, "> 1.0.0", runtime: false, optional: true}
+      {:earmark, "~> 1.4", runtime: false, optional: true}
     ]
   end
 
